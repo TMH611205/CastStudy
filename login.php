@@ -1,6 +1,6 @@
 <?php 
 session_start();
-if(isset($_SESSION['user'])) header('Location: index.php'); // nếu log rồi thì đá về trang chủ
+if(isset($_SESSION['user'])) header('Location: index.php');// nếu log rồi thì đá về trang chủ
 include 'includes/header.php'; 
 ?>
 

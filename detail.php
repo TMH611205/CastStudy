@@ -1,4 +1,5 @@
 <?php 
+session_start();
 require_once 'includes/db_config.php'; 
 require_once 'includes/header.php'; 
 
@@ -60,6 +61,94 @@ if (isset($_GET['id'])) {
                     <?php } ?>
                 </div>
             </div>
+<!-- COMMENT -->
+<div class="mt-5">
+    <h4 class="fw-bold mb-3">Đánh giá</h4>
+
+    <?php if(isset($_SESSION['user_id'])): ?>
+
+    <form action="add_comment.php" method="POST" class="mb-4">
+        <input type="hidden" name="motel_id" value="<?php echo $room['ID']; ?>">
+
+        <textarea name="content" class="form-control mb-2" placeholder="Viết bình luận..." required></textarea>
+
+        <div class="d-flex justify-content-between">
+            <select name="rating" class="form-select w-auto">
+                <option value="5">⭐⭐⭐⭐⭐</option>
+                <option value="4">⭐⭐⭐⭐</option>
+                <option value="3">⭐⭐⭐</option>
+                <option value="2">⭐⭐</option>
+                <option value="1">⭐</option>
+            </select>
+
+            <button class="btn btn-primary">Gửi</button>
+        </div>
+    </form>
+
+    <?php else: ?>
+        <p>👉 Vui lòng đăng nhập để bình luận</p>
+    <?php endif; ?>
+
+    <!-- HIỂN THỊ COMMENT -->
+    <?php
+    $sql_cmt = "SELECT comments.*, user.Name, user.Avatar 
+                FROM comments 
+                JOIN user ON comments.user_id = user.ID
+                WHERE motel_id = {$room['ID']}
+                ORDER BY created_at DESC";
+
+    $res_cmt = mysqli_query($conn, $sql_cmt);
+
+    while($c = mysqli_fetch_assoc($res_cmt)){
+    ?>
+
+    <div class="card mb-2 p-3">
+        <div class="d-flex align-items-center mb-2">
+            <img src="uploads/avatars/<?php echo $c['Avatar']; ?>" 
+                 width="40" height="40" 
+                 class="rounded-circle me-2"
+                 style="object-fit:cover;">
+
+            <div>
+                <b><?php echo $c['Name']; ?></b>
+                <div style="font-size:12px;color:gray;">
+                    <?php echo $c['created_at']; ?>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <?php echo str_repeat("⭐", $c['rating']); ?>
+        </div>
+
+       <p class="mt-2 mb-1"><?php echo $c['content']; ?></p>
+
+<!-- REACTION -->
+<div class="small text-muted position-relative mt-1">
+
+    <span style="cursor:pointer;" onmouseover="showReact(<?php echo $c['ID']; ?>)">
+        ❤️ Yêu thích
+    </span>
+
+    · <?php echo $c['created_at']; ?>
+
+    <!-- BOX -->
+    <div id="react-box-<?php echo $c['ID']; ?>" class="react-box">
+        <span onclick="react(<?php echo $c['ID']; ?>,'love')">❤️</span>
+    </div>
+
+    <!-- COUNT -->
+    <div class="mt-1">
+        ❤️ <?php echo $c['react_love'] ?? 0; ?>
+    </div>
+
+</div>
+
+    </div>
+
+    <?php } ?>
+
+</div>
 
             <h2 class="fw-bold mb-3"><?php echo $room['title']; ?></h2>
             <p class="text-muted"><i class="fa-solid fa-location-dot me-2"></i> <?php echo $room['address']; ?></p>
@@ -123,5 +212,41 @@ if (isset($_GET['id'])) {
         </div>
     </div>
 </div>
+<style>
+.react-box{
+    display:none;
+    position:absolute;
+    background:#fff;
+    padding:5px 10px;
+    border-radius:30px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.2);
+    top:-40px;
+}
+
+.react-box span{
+    font-size:20px;
+    margin:0 5px;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+.react-box span:hover{
+    transform:scale(1.3);
+}
+<script>
+function showReact(id){
+    document.getElementById("react-box-"+id).style.display = "block";
+}
+
+function react(id, type){
+    fetch("react.php", {
+        method:"POST",
+        headers:{"Content-Type":"application/x-www-form-urlencoded"},
+        body:"id="+id+"&type="+type
+    }).then(()=>location.reload());
+}
+</script>
+
+</style>
 
 <?php include 'includes/footer.php'; ?>

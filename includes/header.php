@@ -39,14 +39,17 @@ $path = ($current_dir == 'admin') ? '../' : '';
                 <?php else: ?>
                     <li class="nav-item dropdown ms-lg-3">
                         <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="<?php echo $path; ?>uploads/<?php echo $_SESSION['user']['avatar']; ?>" class="rounded-circle me-2 border border-primary-subtle" width="35" height="35" style="object-fit: cover;">
-                        <span class="fw-bold text-dark">Hi, <?php echo $_SESSION['user']['name']; ?></span>
+                        <img src="<?php echo $path; ?>uploads/avatars/<?php echo $_SESSION['user']['Avatar']; ?>" class="rounded-circle me-2 border border-primary-subtle" width="35" height="35" style="object-fit: cover;">
+                        <span class="fw-bold text-dark">Hi, <?php echo $_SESSION['user']['Name']; ?></span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 mt-3 rounded-4 p-2">
                         <li><a class="dropdown-item py-2 rounded-3" href="<?php echo $path; ?>profile.php"><i class="fa-solid fa-user-circle me-2 text-muted"></i> Hồ sơ cá nhân</a></li>
                         <li><a class="dropdown-item py-2 rounded-3" href="<?php echo $path; ?>my-rooms.php"><i class="fa-solid fa-list-check me-2 text-muted"></i> Quản lý tin đăng</a></li>
         
-                <?php if($_SESSION['user']['role'] == 2): ?> 
+                <?php if(isset($_SESSION['user']['Role']) && $_SESSION['user']['Role'] == 2): ?> 
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item text-primary fw-bold rounded-3" href="<?php echo $path; ?>admin/dashboard.php"><i class="fa-solid fa-gauge-high me-2"></i> Quản trị hệ thống</a></li>
+                 <?php elseif(isset($_SESSION['user']['role']) && $_SESSION['user']['role'] == 2): ?>
                     <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item text-primary fw-bold rounded-3" href="<?php echo $path; ?>admin/dashboard.php"><i class="fa-solid fa-gauge-high me-2"></i> Quản trị hệ thống</a></li>
                  <?php endif; ?>
