@@ -99,6 +99,13 @@ $total_views   = get_count($conn, "SELECT SUM(count_view) as total FROM motel");
                             <small class="text-muted">Cấp quyền, khóa tài khoản</small>
                         </a>
                     </div>
+                    <div class="col-md-4">
+                        <a href="stats.php" class="btn btn-light w-100 p-4 rounded-4 text-start border-0 shadow-sm hover-up h-100">
+                            <i class="fa-solid fa-chart-line text-warning mb-3 fs-3"></i>
+                            <div class="fw-bold">Thống kê</div>
+                            <small class="text-muted">Báo cáo tin đăng theo tháng</small>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

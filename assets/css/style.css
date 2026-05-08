@@ -136,6 +136,7 @@ body {
 footer {
     overflow: hidden;
 }
+
 #chatFloatBtn {
     position: fixed;
     right: 28px;
