@@ -34,7 +34,7 @@ function selectSuggest(val) {
  * 3. Xử lý Thả tim (Wishlist)
  */
 function toggleWishlist(motelId, btn) {
-    const icon = btn.querySelector('i');
+    const icon = btn ? (btn.querySelector('i, svg') || btn.firstElementChild) : null;
     
     // Gửi dữ liệu theo phương thức POST đến file xử lý
     const formData = new URLSearchParams();
@@ -47,11 +47,23 @@ function toggleWishlist(motelId, btn) {
         },
         body: formData.toString()
     })
-    .then(res => {
-        if (!res.ok) {
-            throw new Error('HTTP ' + res.status);
+    .then(async res => {
+        const text = await res.text();
+        let data = {};
+
+        if (text) {
+            try {
+                data = JSON.parse(text);
+            } catch (parseError) {
+                throw new Error(text || ('HTTP ' + res.status));
+            }
         }
-        return res.json();
+
+        if (!res.ok) {
+            throw new Error(data.message || ('HTTP ' + res.status));
+        }
+
+        return data;
     })
     .then(data => {
         const countEl = document.getElementById('wishlistCount');
@@ -60,10 +72,14 @@ function toggleWishlist(motelId, btn) {
         }
 
         if (data.status === 'added') {
-            icon.classList.replace('fa-regular', 'fa-solid');
+            if (icon && icon.classList) {
+                icon.classList.replace('fa-regular', 'fa-solid');
+            }
             alert(data.message || 'Đã thêm vào danh sách yêu thích!');
         } else if (data.status === 'removed') {
-            icon.classList.replace('fa-solid', 'fa-regular');
+            if (icon && icon.classList) {
+                icon.classList.replace('fa-solid', 'fa-regular');
+            }
             alert(data.message || 'Đã xóa khỏi danh sách yêu thích!');
         } else {
             alert(data.message || 'Bạn cần đăng nhập để sử dụng tính năng này.');
@@ -75,6 +91,6 @@ function toggleWishlist(motelId, btn) {
     })
     .catch(err => {
         console.error('Lỗi Wishlist:', err);
-        alert('Có lỗi xảy ra, vui lòng thử lại sau.');
+        alert(err.message || 'Có lỗi xảy ra, vui lòng thử lại sau.');
     });
 }
