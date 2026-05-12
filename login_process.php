@@ -92,6 +92,7 @@ if (mysqli_num_rows($result) == 1) {
         }
 
         $_SESSION['user'] = $user;
+        $_SESSION['user_id'] = intval($user['ID']);
 
         // reset số lần sai
         $_SESSION['failed'] = 0;

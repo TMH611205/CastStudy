@@ -24,6 +24,20 @@ if (isset($_GET['id'])) {
         $raw_images = explode(',', $room['images']); 
         $all_images = array_filter(array_map('trim', $raw_images));
         $first_img = !empty($all_images) ? reset($all_images) : 'default-room.jpg';
+
+        $is_fav = false;
+        $fav_user_id = 0;
+        if (isset($_SESSION['user_id'])) {
+            $fav_user_id = intval($_SESSION['user_id']);
+        } elseif (isset($_SESSION['user']['ID'])) {
+            $fav_user_id = intval($_SESSION['user']['ID']);
+        }
+        if ($fav_user_id > 0) {
+            $favCheck = mysqli_query($conn, "SELECT * FROM favorites WHERE user_id = $fav_user_id AND motel_id = " . intval($room['ID']));
+            if ($favCheck && mysqli_num_rows($favCheck) > 0) {
+                $is_fav = true;
+            }
+        }
     } else {
         echo "<div class='container my-5'><h3>không tìm thấy phòng trọ này m ơi!</h3></div>";
         include 'includes/footer.php';
@@ -213,8 +227,8 @@ $roomLng = !empty($room['longitude']) ? (float)$room['longitude'] : $vinhLng;
                         <a href="tel:<?php echo htmlspecialchars($room['phone']); ?>" class="btn btn-primary py-3 fw-bold rounded-pill shadow">
                             <i class="fa-solid fa-phone me-2"></i> Gọi ngay: <?php echo htmlspecialchars($room['phone']); ?>
                         </a>
-                        <button class="btn btn-outline-dark py-3 fw-bold rounded-pill">
-                            <i class="fa-solid fa-heart me-2"></i> Lưu tin này
+                        <button type="button" class="btn btn-outline-dark py-3 fw-bold rounded-pill" onclick="toggleWishlist(<?php echo $room['ID']; ?>, this)">
+                            <i class="<?php echo $is_fav ? 'fa-solid' : 'fa-regular'; ?> fa-heart me-2"></i> Lưu tin này
                         </button>
                     </div>
 
@@ -264,6 +278,7 @@ $roomLng = !empty($room['longitude']) ? (float)$room['longitude'] : $vinhLng;
 </style>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="assets/js/search.js"></script>
 
 <script>
 const roomLat = <?php echo $roomLat; ?>;

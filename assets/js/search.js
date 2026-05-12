@@ -47,19 +47,30 @@ function toggleWishlist(motelId, btn) {
         },
         body: formData.toString()
     })
-    .then(res => res.json())
+    .then(res => {
+        if (!res.ok) {
+            throw new Error('HTTP ' + res.status);
+        }
+        return res.json();
+    })
     .then(data => {
+        const countEl = document.getElementById('wishlistCount');
+        if (typeof data.count !== 'undefined' && countEl) {
+            countEl.textContent = data.count;
+        }
+
         if (data.status === 'added') {
-            // Đổi icon sang tim đặc (đã thích)
             icon.classList.replace('fa-regular', 'fa-solid');
-            alert('Đã thêm vào danh sách yêu thích!');
+            alert(data.message || 'Đã thêm vào danh sách yêu thích!');
         } else if (data.status === 'removed') {
-            // Đổi icon sang tim rỗng (bỏ thích)
             icon.classList.replace('fa-solid', 'fa-regular');
-            alert('Đã xóa khỏi danh sách yêu thích!');
+            alert(data.message || 'Đã xóa khỏi danh sách yêu thích!');
         } else {
-            // Hiện lỗi nếu chưa đăng nhập
-            alert(data.message);
+            alert(data.message || 'Bạn cần đăng nhập để sử dụng tính năng này.');
+        }
+
+        if (window.location.pathname.includes('favorites.php')) {
+            location.reload();
         }
     })
     .catch(err => {

@@ -3,6 +3,17 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+// Đếm số tin đã lưu để hiển thị ở header
+$favorites_count = 0;
+if (isset($conn) && (isset($_SESSION['user_id']) || isset($_SESSION['user']['ID']))) {
+    $userIdForFav = isset($_SESSION['user_id']) ? intval($_SESSION['user_id']) : intval($_SESSION['user']['ID']);
+    $favQuery = mysqli_query($conn, "SELECT COUNT(*) AS cnt FROM favorites WHERE user_id = $userIdForFav");
+    if ($favQuery) {
+        $favRow = mysqli_fetch_assoc($favQuery);
+        $favorites_count = intval($favRow['cnt']);
+    }
+}
+
 // Mẹo fix link: Kiểm tra nếu đang ở trong folder admin thì lùi ra 1 cấp
 $current_dir = basename(dirname($_SERVER['PHP_SELF']));
 $path = ($current_dir == 'admin') ? '../' : '';
@@ -30,8 +41,17 @@ $path = ($current_dir == 'admin') ? '../' : '';
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto align-items-center">
                 <li class="nav-item"><a class="nav-link fw-semibold" href="<?php echo $path; ?>index.php">Trang chủ</a></li>
+                <?php if(isset($_SESSION['user'])): ?>
+                    <li class="nav-item">
+                        <a class="nav-link position-relative fw-semibold" href="<?php echo $path; ?>favorites.php">
+                            <i class="fa-solid fa-heart text-danger me-1"></i>
+                            Tin đã lưu
+                            <span id="wishlistCount" class="badge bg-danger rounded-pill ms-1"><?php echo $favorites_count; ?></span>
+                        </a>
+                    </li>
+                <?php endif; ?>
                 
-                <?php if(!isset($_SESSION['user'])): ?>
+                <?php if(!isset($_SESSION['user']) && !isset($_SESSION['user_id'])): ?>
                     <li class="nav-item"><a class="nav-link fw-semibold" href="<?php echo $path; ?>login.php">Đăng nhập</a></li>
                     <li class="nav-item">
                         <a class="nav-link text-white btn btn-primary rounded-pill px-4 ms-lg-2 shadow-sm" href="<?php echo $path; ?>register.php">Tham gia ngay</a>
