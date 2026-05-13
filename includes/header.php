@@ -57,6 +57,7 @@ $path = ($current_dir == 'admin') ? '../' : '';
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto align-items-center">
                 <li class="nav-item"><a class="nav-link fw-semibold" href="<?php echo $path; ?>index.php">Trang chủ</a></li>
+                <li class="nav-item"><a class="nav-link fw-semibold" href="<?php echo $path; ?>all_room.php">Phòng trọ</a></li>
                 <?php if(isset($_SESSION['user'])): ?>
                     <li class="nav-item">
                         <a class="nav-link position-relative fw-semibold" href="<?php echo $path; ?>favorites.php">

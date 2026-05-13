@@ -77,7 +77,7 @@ require_once 'includes/header.php';
                 <h3 class="fw-bold m-0 border-start border-5 border-primary ps-3">
                     Phòng trọ mới nhất
                 </h3>
-                <a href="all_rooms.php" class="text-primary text-decoration-none fw-semibold">
+                <a href="all_room.php" class="text-primary text-decoration-none fw-semibold">
                     Xem thêm <i class="fa-solid fa-arrow-right-long ms-1"></i>
                 </a>
             </div>

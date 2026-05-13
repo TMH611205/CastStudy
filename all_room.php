@@ -77,12 +77,12 @@ if (!$result) {
 
     <div class="mb-4 d-flex flex-wrap gap-2">
 
-        <a href="all_rooms.php" class="btn btn-outline-dark rounded-pill px-4">
+        <a href="all_room.php" class="btn btn-outline-dark rounded-pill px-4">
             <i class="fa-solid fa-list me-2"></i>
             Tất cả
         </a>
 
-        <a href="all_rooms.php?near_vinh=1" class="btn btn-success rounded-pill px-4">
+        <a href="all_room.php?near_vinh=1" class="btn btn-success rounded-pill px-4">
             <i class="fa-solid fa-school me-2"></i>
             Gần Đại học Vinh
         </a>
