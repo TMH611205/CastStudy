@@ -9,7 +9,7 @@ $district_id = isset($_GET['district']) && $_GET['district'] !== '' ? intval($_G
 $category_id = isset($_GET['category']) && $_GET['category'] !== '' ? intval($_GET['category']) : 0;
 $price_range = $_GET['price'] ?? '';
 $near_vinh = $_GET['near_vinh'] ?? '';
-
+$utility = $_GET['utility'] ?? '';
 // Xử lý khoảng giá từ index.php
 $min_price = 0;
 $max_price = 999999999;
@@ -66,7 +66,10 @@ if ($district_id > 0) {
     $address_search = mysqli_real_escape_string($conn, $address_search);
     $sql .= " AND motel.address LIKE '%$address_search%'";
 }
-
+if (!empty($utility)) {
+    $utility = mysqli_real_escape_string($conn, $utility);
+    $sql .= " AND motel.utilities LIKE '%$utility%'";
+}
 if ($near_vinh == '1') {
     $sql .= " AND $distanceSql <= $radiusKm ORDER BY distance_km ASC";
 } else {
@@ -109,6 +112,18 @@ if (!$result) {
                         <input type="number" name="max_price" class="form-control" placeholder="Đến" value="<?php echo $_GET['max_price'] ?? ''; ?>">
                     </div>
                 </div>
+                <div class="col-md-4">
+    <label class="fw-bold mb-1">Tiện ích</label>
+ 
+    <select name="utility" class="form-select">
+        <option value="">Tất cả tiện ích</option>
+        <option value="wifi" <?php echo ($utility == 'wifi') ? 'selected' : ''; ?>>Wifi</option>
+        <option value="máy lạnh" <?php echo ($utility == 'máy lạnh') ? 'selected' : ''; ?>>Máy lạnh</option>
+        <option value="tủ lạnh" <?php echo ($utility == 'tủ lạnh') ? 'selected' : ''; ?>>Tủ lạnh</option>
+        <option value="máy giặt" <?php echo ($utility == 'máy giặt') ? 'selected' : ''; ?>>Máy giặt</option>
+        <option value="nóng lạnh" <?php echo ($utility == 'nóng lạnh') ? 'selected' : ''; ?>>Nóng lạnh</option>
+    </select>
+</div>
                 <div class="col-md-12 d-flex align-items-end">
                     <div class="form-check me-3">
                         <input class="form-check-input" type="checkbox" name="near_vinh" value="1" id="near_vinh" <?php echo ($near_vinh == '1') ? 'checked' : ''; ?>>
