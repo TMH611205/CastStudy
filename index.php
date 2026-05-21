@@ -60,7 +60,7 @@ require_once 'includes/header.php';
     <label class="form-label fw-bold text-secondary small">
         <i class="fa-solid fa-wifi me-1"></i> Tiện ích
     </label>
-
+ 
     <select name="utility" class="form-select border-0 bg-light p-3">
         <option value="">Tất cả tiện ích</option>
         <option value="wifi">Wifi</option>

@@ -114,7 +114,7 @@ if (!$result) {
                 </div>
                 <div class="col-md-4">
     <label class="fw-bold mb-1">Tiện ích</label>
-
+ 
     <select name="utility" class="form-select">
         <option value="">Tất cả tiện ích</option>
         <option value="wifi" <?php echo ($utility == 'wifi') ? 'selected' : ''; ?>>Wifi</option>
