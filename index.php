@@ -56,8 +56,21 @@ require_once 'includes/header.php';
                     <option value="3">Trên 3 triệu</option>
                 </select>
             </div>
+<div class="col-md-3">
+    <label class="form-label fw-bold text-secondary small">
+        <i class="fa-solid fa-wifi me-1"></i> Tiện ích
+    </label>
 
-            <div class="col-md-3">
+    <select name="utility" class="form-select border-0 bg-light p-3">
+        <option value="">Tất cả tiện ích</option>
+        <option value="wifi">Wifi</option>
+        <option value="máy lạnh">Máy lạnh</option>
+        <option value="tủ lạnh">Tủ lạnh</option>
+        <option value="máy giặt">Máy giặt</option>
+        <option value="nóng lạnh">Nóng lạnh</option>
+    </select>
+</div>
+            <div class="col-md-12">
                 <button type="submit" class="btn btn-primary w-100 py-3 fw-bold shadow">
                     <i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm
                 </button>
